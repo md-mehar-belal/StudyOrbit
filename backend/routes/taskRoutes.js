@@ -1,7 +1,8 @@
 const express = require("express");
 const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
+
+const cloudinary = require("../config/cloudinary");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
 const Task = require("../models/Task");
 const DeletedTask = require("../models/DeletedTask");
@@ -14,41 +15,16 @@ const requireRole = require("../middleware/roleMiddleware");
 const router = express.Router();
 
 // ======================================================
-// UPLOAD DIRECTORY
+// CLOUDINARY STORAGE
 // ======================================================
 
-const uploadDirectory = path.join(
-  process.cwd(),
-  "uploads",
-  "proofs",
-);
+const storage = new CloudinaryStorage({
+  cloudinary,
 
-if (!fs.existsSync(uploadDirectory)) {
-  fs.mkdirSync(uploadDirectory, {
-    recursive: true,
-  });
-}
-
-// ======================================================
-// MULTER STORAGE
-// ======================================================
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDirectory);
-  },
-
-  filename: (req, file, cb) => {
-    const extension = path.extname(
-      file.originalname,
-    ).toLowerCase();
-
-    const filename =
-      `${Date.now()}-${Math.round(
-        Math.random() * 1e9,
-      )}${extension}`;
-
-    cb(null, filename);
+  params: {
+    folder: "StudyOrbit/proofs",
+    resource_type: "image",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
   },
 });
 
@@ -64,21 +40,16 @@ const upload = multer({
   },
 
   fileFilter: (req, file, cb) => {
-    if (
-      file.mimetype &&
-      file.mimetype.startsWith("image/")
-    ) {
+    if (file.mimetype && file.mimetype.startsWith("image/")) {
       cb(null, true);
       return;
     }
 
-    cb(
-      new Error(
-        "Only image files are allowed",
-      ),
-    );
+    cb(new Error("Only image files are allowed"));
   },
 });
+
+
 
 // ======================================================
 // HELPER: POPULATE TASK
@@ -141,36 +112,7 @@ function isStudentInClass(
   );
 }
 
-// ======================================================
-// HELPER: DELETE UPLOADED FILE
-// ======================================================
 
-function deleteProofFile(
-  proofImage,
-) {
-  if (!proofImage) {
-    return;
-  }
-
-  try {
-    const filename =
-      path.basename(proofImage);
-
-    const filePath = path.join(
-      uploadDirectory,
-      filename,
-    );
-
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
-    }
-  } catch (error) {
-    console.error(
-      "Delete proof file error:",
-      error,
-    );
-  }
-}
 
 // ======================================================
 // GET ALL TASKS
@@ -1007,8 +949,7 @@ router.put(
       task.completed =
         true;
 
-      task.proofImage =
-        `/uploads/proofs/${req.file.filename}`;
+      task.proofImage = req.file.path;
 
       task.reviewStatus =
         "submitted";
@@ -1061,212 +1002,7 @@ router.put(
   },
 );
 
-// ======================================================
-// REVIEW TASK
-// TEACHER ONLY
-// ======================================================
 
-router.put(
-  "/:id/review",
-  authMiddleware,
-  requireRole("teacher"),
-
-  async (req, res) => {
-    try {
-      const {
-        rating,
-        teacherComment,
-      } = req.body;
-
-      // ==================================================
-      // FIND TASK
-      // ==================================================
-
-      const task =
-        await Task.findById(
-          req.params.id,
-        );
-
-      if (!task) {
-        return res.status(404).json({
-          message:
-            "Task not found",
-        });
-      }
-
-      // ==================================================
-      // TEACHER OWNERSHIP
-      // ==================================================
-
-      if (
-        String(task.teacherId) !==
-        String(req.user.id)
-      ) {
-        return res.status(403).json({
-          message:
-            "You can only review your own tasks",
-        });
-      }
-
-      // ==================================================
-      // VERIFY CLASS OWNERSHIP
-      // ==================================================
-
-      const classItem =
-        await getTeacherClass(
-          task.classId,
-          req.user.id,
-        );
-
-      if (!classItem) {
-        return res.status(403).json({
-          message:
-            "You are no longer authorized to review this task",
-        });
-      }
-
-      // ==================================================
-      // COMPLETED CHECK
-      // ==================================================
-
-      if (!task.completed) {
-        return res.status(400).json({
-          message:
-            "Student has not completed this task yet",
-        });
-      }
-
-      // ==================================================
-      // PROOF CHECK
-      // ==================================================
-
-      if (!task.proofImage) {
-        return res.status(400).json({
-          message:
-            "Student proof is not available",
-        });
-      }
-
-      // ==================================================
-      // RATING VALIDATION
-      // ==================================================
-
-      if (
-        rating === undefined ||
-        rating === null ||
-        rating === ""
-      ) {
-        return res.status(400).json({
-          message:
-            "Rating is required",
-        });
-      }
-
-      const numericRating =
-        Number(rating);
-
-      if (
-        !Number.isInteger(
-          numericRating,
-        ) ||
-        numericRating < 1 ||
-        numericRating > 5
-      ) {
-        return res.status(400).json({
-          message:
-            "Rating must be between 1 and 5",
-        });
-      }
-
-      // ==================================================
-      // COMMENT VALIDATION
-      // ==================================================
-
-      let cleanComment = "";
-
-      if (
-        teacherComment !==
-        undefined &&
-        teacherComment !==
-        null
-      ) {
-        if (
-          typeof teacherComment !==
-          "string"
-        ) {
-          return res.status(400).json({
-            message:
-              "Teacher comment must be text",
-          });
-        }
-
-        cleanComment =
-          teacherComment.trim();
-
-        if (
-          cleanComment.length >
-          1000
-        ) {
-          return res.status(400).json({
-            message:
-              "Teacher comment cannot exceed 1000 characters",
-          });
-        }
-      }
-
-      // ==================================================
-      // SAVE REVIEW
-      // ==================================================
-
-      task.rating =
-        numericRating;
-
-      task.teacherComment =
-        cleanComment;
-
-      task.reviewStatus =
-        "reviewed";
-
-      task.reviewedAt =
-        new Date();
-
-      await task.save();
-
-      const reviewedTask =
-        await getPopulatedTask(
-          task._id,
-        );
-
-      return res.json({
-        message:
-          "Task reviewed successfully",
-
-        task:
-          reviewedTask,
-      });
-    } catch (error) {
-      console.error(
-        "Review task error:",
-        error,
-      );
-
-      if (
-        error.name ===
-        "CastError"
-      ) {
-        return res.status(400).json({
-          message:
-            "Invalid task ID",
-        });
-      }
-
-      return res.status(500).json({
-        message:
-          "Failed to review task",
-      });
-    }
-  },
-);
 
 // ======================================================
 // DELETE TASK

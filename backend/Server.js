@@ -4,6 +4,8 @@ const cors = require("cors");
 
 require("dotenv").config();
 
+const path = require("path");
+
 // ========================================
 // ROUTES
 // ========================================
@@ -42,7 +44,7 @@ app.use(express.json());
 // ========================================
 
 // Uploaded files
-app.use("/uploads", express.static("uploads"));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // ========================================
 // API ROUTES

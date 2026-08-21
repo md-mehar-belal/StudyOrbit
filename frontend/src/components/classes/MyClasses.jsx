@@ -353,6 +353,11 @@ function MyClasses() {
       await fetchClasses();
 
       setSuccess("Classes refreshed successfully.");
+
+      // 5 seconds ke baad success message hide
+      setTimeout(() => {
+        setSuccess("");
+      }, 5000);
     } catch (refreshError) {
       console.error("Refresh classes failed:", refreshError);
     }

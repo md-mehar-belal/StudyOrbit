@@ -656,6 +656,7 @@ img {
   color: var(--success-dark);
 
   font-size: 12px;
+  margin-bottom: 12px;
 }
 
 /* =========================================================

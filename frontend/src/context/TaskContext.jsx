@@ -840,25 +840,37 @@ export function TaskProvider({ children }) {
         // ==========================================
 
         if (!file) {
-          throw new Error("Please select an image");
+          throw new Error("Please select a file");
         }
 
-        // ==========================================
-        // IMAGE TYPE
-        // ==========================================
+        // FILE TYPE
 
-        if (!file.type || !file.type.startsWith("image/")) {
-          throw new Error("Only image files are allowed");
+        const allowedTypes = [
+          "image/jpeg",
+          "image/png",
+          "image/gif",
+          "image/webp",
+          "application/pdf",
+          "application/msword",
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "application/vnd.ms-powerpoint",
+          "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        ];
+
+        if (!file.type || !allowedTypes.includes(file.type)) {
+          throw new Error(
+            "Only JPG, PNG, GIF, WEBP, PDF, DOC, DOCX, PPT and PPTX files are allowed",
+          );
         }
 
         // ==========================================
         // SIZE
         // ==========================================
 
-        const maxFileSize = 5 * 1024 * 1024;
+        const maxFileSize = 100 * 1024 * 1024;
 
         if (file.size > maxFileSize) {
-          throw new Error("Image size must be less than 5 MB");
+          throw new Error("File size must be less than 100 MB");
         }
 
         setActionLoading(true);

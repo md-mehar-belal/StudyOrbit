@@ -23,8 +23,7 @@ const storage = new CloudinaryStorage({
 
   params: {
     folder: "StudyOrbit/proofs",
-    resource_type: "image",
-    allowed_formats: ["jpg", "jpeg", "png", "webp"],
+    resource_type: "auto",
   },
 });
 
@@ -36,16 +35,47 @@ const upload = multer({
   storage,
 
   limits: {
-    fileSize: 5 * 1024 * 1024,
+    // Maximum 100 MB
+    fileSize: 100 * 1024 * 1024,
   },
 
   fileFilter: (req, file, cb) => {
-    if (file.mimetype && file.mimetype.startsWith("image/")) {
+    const allowedTypes = [
+      // Images
+      "image/jpeg",
+      "image/png",
+      "image/gif",
+      "image/webp",
+
+      // PDF
+      "application/pdf",
+
+      // Word
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+
+      // PowerPoint
+      "application/vnd.ms-powerpoint",
+      "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+
+      // Excel
+      "application/vnd.ms-excel",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+
+      // Text
+      "text/plain",
+    ];
+
+    if (allowedTypes.includes(file.mimetype)) {
       cb(null, true);
       return;
     }
 
-    cb(new Error("Only image files are allowed"));
+    cb(
+      new Error(
+        "Invalid file type. Allowed: Images, PDF, Word, PPT, Excel and TXT."
+      )
+    );
   },
 });
 
@@ -937,8 +967,7 @@ router.put(
 
       if (!req.file) {
         return res.status(400).json({
-          message:
-            "Please upload a proof image",
+          message: "Please upload a proof file",
         });
       }
 
@@ -1158,13 +1187,9 @@ router.use(
       error instanceof
       multer.MulterError
     ) {
-      if (
-        error.code ===
-        "LIMIT_FILE_SIZE"
-      ) {
+      if (error.code === "LIMIT_FILE_SIZE") {
         return res.status(400).json({
-          message:
-            "Image size must be less than 5 MB",
+          message: "File size must be less than or equal to 100 MB",
         });
       }
 
@@ -1178,11 +1203,11 @@ router.use(
     if (
       error &&
       error.message ===
-      "Only image files are allowed"
+      "Invalid file type. Allowed: Images, PDF, Word, PPT, Excel and TXT."
     ) {
       return res.status(400).json({
         message:
-          "Only image files are allowed",
+          "Invalid file type. Allowed: Images, PDF, Word, PPT, Excel and TXT.",
       });
     }
 

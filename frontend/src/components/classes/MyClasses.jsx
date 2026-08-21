@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { useAuth } from "../../context/AuthContext";
 import { useClasses } from "../../context/ClassContext";
@@ -40,6 +40,29 @@ function MyClasses() {
 
   const [success, setSuccess] = useState("");
 
+  // ====================================================
+  // AUTO CLEAR SUCCESS / ERROR MESSAGES
+  // ====================================================
+
+  useEffect(() => {
+    if (!success) return;
+
+    const timer = setTimeout(() => {
+      setSuccess("");
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [success]);
+
+  useEffect(() => {
+    if (!error) return;
+
+    const timer = setTimeout(() => {
+      clearError();
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [error, clearError]);
   // ====================================================
   // ROLE
   // ====================================================
@@ -312,9 +335,6 @@ function MyClasses() {
       setSuccess(`"${subject}" deactivated successfully.`);
 
       // Automatically hide success message after 3 seconds
-      setTimeout(() => {
-        setSuccess("");
-      }, 5000);
     } catch (deleteError) {
       console.error("Deactivate class failed:", deleteError);
     } finally {
@@ -466,10 +486,6 @@ function MyClasses() {
       {error && (
         <div className="form-error" role="alert">
           <span>{error}</span>
-
-          <button type="button" onClick={clearError} aria-label="Close error">
-            ×
-          </button>
         </div>
       )}
 

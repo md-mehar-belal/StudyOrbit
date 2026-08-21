@@ -622,21 +622,40 @@ img {
 }
 
 .form-error {
+  width: fit-content;
+  max-width: 100%;
+
+  padding: 8px 12px;
+
+  margin-bottom: 13px;
+
   background: var(--danger-light);
 
-  border:
-    1px solid var(--danger-border);
+  border: 1px solid var(--danger-border);
+
+  border-radius: 7px;
 
   color: var(--danger-dark);
+
+  font-size: 12px;
 }
 
 .form-success {
+  width: fit-content;
+  max-width: 100%;
+
+  padding: 8px 12px;
+
   background: var(--success-light);
 
   border:
     1px solid var(--success-border);
 
+  border-radius: 7px;
+
   color: var(--success-dark);
+
+  font-size: 12px;
 }
 
 /* =========================================================
@@ -1911,24 +1930,23 @@ textarea {
 
   align-items: center;
 
-  gap: 12px;
+  gap: 10px;
 
-  max-width: min(420px, calc(100% - 30px));
+  max-width: 280px;
 
-  padding:
-    12px 15px;
+  padding: 10px 12px;
 
   background: #991b1b;
 
   color: white;
 
-  border-radius: 9px;
+  border-radius: 8px;
 
   box-shadow:
-    0 10px 30px
-    rgba(0, 0, 0, 0.2);
+    0 8px 24px
+    rgba(0, 0, 0, 0.18);
 
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .error-toast button {
@@ -1940,7 +1958,11 @@ textarea {
 
   color: white;
 
-  font-size: 19px;
+  font-size: 17px;
+
+  line-height: 1;
+
+  padding: 0;
 }
 
 /* =========================================================

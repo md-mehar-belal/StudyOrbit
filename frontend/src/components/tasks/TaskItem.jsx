@@ -261,6 +261,10 @@ function TaskItem({
   // FILE CHANGE
   // ========================================
 
+  // ========================================
+  // FILE CHANGE
+  // ========================================
+
   const handleFileChange = async (event) => {
     const file = event.target.files?.[0];
 
@@ -269,28 +273,42 @@ function TaskItem({
     }
 
     // ====================================
-    // IMAGE TYPE
+    // ALLOWED FILE TYPES
     // ====================================
 
-    if (!file.type.startsWith("image/")) {
-      alert("Please select an image file.");
+    const allowedExtensions = [
+      "jpg",
+      "jpeg",
+      "png",
+      "webp",
+      "pdf",
+      "doc",
+      "docx",
+      "ppt",
+      "pptx",
+    ];
+
+    const extension = file.name.split(".").pop()?.toLowerCase();
+
+    if (!extension || !allowedExtensions.includes(extension)) {
+      alert(
+        "Invalid file type. Please upload JPG, PNG, WEBP, PDF, DOC, DOCX, PPT or PPTX.",
+      );
 
       event.target.value = "";
-
       return;
     }
 
     // ====================================
-    // FILE SIZE
+    // FILE SIZE - MAX 100 MB
     // ====================================
 
-    const maxSize = 5 * 1024 * 1024;
+    const maxSize = 100 * 1024 * 1024;
 
     if (file.size > maxSize) {
-      alert("Image size must be less than 5 MB.");
+      alert("File size must be less than or equal to 100 MB.");
 
       event.target.value = "";
-
       return;
     }
 
@@ -868,7 +886,7 @@ function TaskItem({
       <input
         ref={fileInputRef}
         type="file"
-        accept="image/*"
+        accept=".jpg,.jpeg,.png,.webp,.pdf,.doc,.docx,.ppt,.pptx"
         style={{
           display: "none",
         }}

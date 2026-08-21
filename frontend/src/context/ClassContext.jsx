@@ -95,6 +95,20 @@ export function ClassProvider({ children }) {
   };
 
   // ====================================================
+  // AUTO CLEAR ERROR AFTER 5 SECONDS
+  // ====================================================
+
+  useEffect(() => {
+    if (!error) return;
+
+    const timer = setTimeout(() => {
+      setError("");
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [error]);
+
+  // ====================================================
   // ADD / UPDATE CLASS
   // ====================================================
 

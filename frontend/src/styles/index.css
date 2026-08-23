@@ -2109,32 +2109,81 @@ textarea {
 }
 
 /* =========================================================
+   STUDENT MY CLASS PAGE
+   ========================================================= */
+
+.parent-link-section {
+  margin-bottom: 34px;
+  padding: 22px 24px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.parent-link-section h2 {
+  margin-bottom: 6px;
+  color: var(--text-primary);
+  font-size: 24px;
+  font-weight: 750;
+}
+
+.parent-link-section > p {
+  margin-bottom: 18px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.parent-link-section .form-error,
+.parent-link-section .form-success {
+  margin-bottom: 16px;
+}
+
+.subjects-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 22px;
+}
+
+.subjects-header-content h1 {
+  margin-bottom: 5px;
+  color: var(--text-primary);
+  font-size: 30px;
+  font-weight: 750;
+  letter-spacing: -0.5px;
+}
+
+.subjects-header-content p {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.subjects-refresh-btn {
+  flex-shrink: 0;
+}
+
+/* =========================================================
    CLASS / SUBJECT CARDS
    ========================================================= */
 
 .classes-grid {
   display: grid;
-
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
-
-  gap: 18px;
+  grid-template-columns: repeat(3, minmax(280px, 1fr));
+  gap: 22px;
+  align-items: stretch;
 }
 
 .class-card,
 .subject-card,
 .created-class-card {
-  padding: 21px;
-
+  min-height: 100%;
+  padding: 24px;
   background: white;
-
-  border:
-    1px solid var(--border);
-
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-
   box-shadow: var(--shadow-sm);
-
   transition:
     border-color var(--transition),
     box-shadow var(--transition),
@@ -2144,74 +2193,54 @@ textarea {
 .class-card:hover,
 .subject-card:hover,
 .created-class-card:hover {
-  transform: translateY(-2px);
-
-  border-color: #d2dbea;
-
+  transform: translateY(-3px);
+  border-color: #cbd9f0;
   box-shadow: var(--shadow-md);
 }
 
 .class-card-header,
 .subject-card-header {
   display: flex;
-
   align-items: flex-start;
-
   justify-content: space-between;
-
   gap: 15px;
-
-  margin-bottom: 17px;
+  margin-bottom: 20px;
 }
 
 .class-card h2,
 .subject-card h3,
 .created-class-card h3 {
   color: var(--text-primary);
-
-  font-size: 18px;
+  font-size: 19px;
   font-weight: 750;
 }
 
 .class-card-header p,
 .subject-card-subtitle {
-  margin-top: 3px;
-
+  margin-top: 5px;
   color: var(--text-muted);
-
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .active-badge {
   display: inline-flex;
-
-  padding:
-    4px 8px;
-
+  padding: 5px 10px;
+  background: var(--success-light);
+  border: 1px solid var(--success-border);
   border-radius: 999px;
-
-  background: #ecfdf3;
-
-  color: #059669;
-
-  font-size: 10px;
+  color: var(--success-dark);
+  font-size: 11px;
   font-weight: 750;
 }
 
 .class-info-row {
+  min-height: 42px;
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
-
-  gap: 20px;
-
-  padding:
-    10px 0;
-
-  border-bottom:
-    1px solid #f0f2f6;
+  gap: 18px;
+  padding: 10px 0;
+  border-bottom: 1px solid #eef1f5;
 }
 
 .class-info-row:last-child {
@@ -2220,16 +2249,16 @@ textarea {
 
 .class-info-row span {
   color: var(--text-muted);
-
   font-size: 12px;
 }
 
 .class-info-row strong {
+  max-width: 65%;
   color: var(--text-secondary);
-
-  font-size: 12px;
-
+  font-size: 13px;
+  font-weight: 700;
   text-align: right;
+  overflow-wrap: anywhere;
 }
 
 /* =========================================================
@@ -2237,46 +2266,54 @@ textarea {
    ========================================================= */
 
 .class-code-section {
-  margin-top: 17px;
-
-  padding: 14px;
-
-  background: #f8faff;
-
-  border:
-    1px solid #dfe8fa;
-
-  border-radius: 9px;
+  margin-top: 20px;
+  padding: 16px;
+  background: #f7faff;
+  border: 1px solid #dbe7fa;
+  border-radius: var(--radius-md);
 }
 
 .class-code-section > span {
   display: block;
-
-  margin-bottom: 5px;
-
+  margin-bottom: 8px;
   color: var(--text-muted);
-
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 650;
 }
 
 .class-code {
   display: inline-block;
-
-  margin-right: 9px;
-
+  margin-right: 12px;
   color: var(--primary);
-
   font-family:
     "SFMono-Regular",
     Consolas,
     "Liberation Mono",
     monospace;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+}
 
-  font-size: 17px;
-  font-weight: 750;
+.class-code-section button {
+  min-height: 34px;
+  padding: 0 13px;
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-sm);
+  background: white;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 700;
+  transition:
+    background var(--transition),
+    border-color var(--transition),
+    color var(--transition);
+}
 
-  letter-spacing: 1.5px;
+.class-code-section button:hover {
+  background: var(--primary-light);
+  border-color: #bfdbfe;
+  color: var(--primary);
 }
 
 /* =========================================================
@@ -2331,44 +2368,46 @@ textarea {
    ========================================================= */
 
 .selected-class-banner {
+  position: relative;
   display: grid;
-
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
-
-  gap: 18px;
-
-  padding:
-    16px 19px;
-
-  margin-bottom: 22px;
-
-  background: #f8faff;
-
-  border:
-    1px solid #dfe8fa;
-
-  border-radius: var(--radius-md);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  padding: 0;
+  margin-bottom: 28px;
+  overflow: hidden;
+  background: white;
+  border: 1px solid #dbe5f5;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
 }
 
 .selected-class-banner div {
+  min-height: 90px;
   display: flex;
-
   flex-direction: column;
+  justify-content: center;
+  padding: 18px 22px;
+  gap: 5px;
+  border-right: 1px solid #edf1f7;
+}
 
-  gap: 2px;
+.selected-class-banner div:last-child {
+  border-right: 0;
 }
 
 .selected-class-banner span {
   color: var(--text-muted);
-
-  font-size: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 
 .selected-class-banner strong {
   color: var(--primary);
-
-  font-size: 13px;
+  font-size: 14px;
+  font-weight: 750;
+  overflow-wrap: anywhere;
 }
 
 /* =========================================================
@@ -2431,7 +2470,19 @@ textarea {
 
 @media (max-width: 1050px) {
   .classes-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(260px, 1fr));
+  }
+
+  .selected-class-banner {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .selected-class-banner div:nth-child(2) {
+    border-right: 0;
+  }
+
+  .selected-class-banner div:nth-child(-n + 2) {
+    border-bottom: 1px solid #edf1f7;
   }
 
   .container {
@@ -2564,6 +2615,23 @@ textarea {
     font-size: 26px;
   }
 
+  .subjects-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .subjects-header-content h1 {
+    font-size: 26px;
+  }
+
+  .subjects-refresh-btn {
+    width: 100%;
+  }
+
+  .parent-link-section {
+    padding: 18px;
+  }
+
   .classes-grid {
     grid-template-columns: 1fr;
   }
@@ -2672,6 +2740,8 @@ textarea {
     bottom: 14px;
   }
 }
+
+
 
 /* =========================================================
    RESPONSIVE - 480

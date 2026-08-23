@@ -280,8 +280,7 @@ function Dashboard() {
             <h2>Child Progress</h2>
 
             <p>
-              Yahan parent apne child ke tasks, submissions aur teacher ratings
-              dekhega.
+              View your child's tasks, submissions, and teacher ratings here.
             </p>
           </div>
         </>

@@ -12,6 +12,8 @@ import Summary from "../summary/Summary";
 import CreateClass from "../classes/CreateClass";
 import JoinClass from "../classes/JoinClass";
 import MyClasses from "../classes/MyClasses";
+import ParentRequest from "../parent/ParentRequest";
+import LinkChild from "../parent/LinkChild";
 
 // ======================================================
 // DASHBOARD
@@ -222,6 +224,8 @@ function Dashboard() {
     if (page === "class") {
       return (
         <>
+          <ParentRequest />
+
           <MyClasses />
 
           <JoinClass />
@@ -269,14 +273,18 @@ function Dashboard() {
 
     if (page === "child") {
       return (
-        <div className="empty-state">
-          <h2>Child Progress</h2>
+        <>
+          <LinkChild />
 
-          <p>
-            Yahan parent apne child ke tasks, submissions aur teacher ratings
-            dekhega.
-          </p>
-        </div>
+          <div className="empty-state">
+            <h2>Child Progress</h2>
+
+            <p>
+              Yahan parent apne child ke tasks, submissions aur teacher ratings
+              dekhega.
+            </p>
+          </div>
+        </>
       );
     }
 

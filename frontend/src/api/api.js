@@ -486,29 +486,38 @@ export const taskApi = {
     // IMAGE TYPE
     // ----------------------------------------------
 
-    if (
-      !file.type ||
-      !file.type.startsWith(
-        "image/",
-      )
-    ) {
+    // ----------------------------------------------
+    // ALLOWED FILE TYPES
+    // ----------------------------------------------
+
+    const allowedTypes = [
+      "image/jpeg",
+      "image/png",
+      "image/jpg",
+      "image/webp",
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "application/vnd.ms-powerpoint",
+      "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    ];
+
+    if (!file.type || !allowedTypes.includes(file.type)) {
       throw new Error(
-        "Please select an image file",
+        "Only JPG, PNG, WEBP, PDF, DOC, DOCX, PPT and PPTX files are allowed"
       );
     }
 
     // ----------------------------------------------
-    // FILE SIZE
+    // FILE SIZE - 100 MB
     // ----------------------------------------------
 
     const maxFileSize =
-      5 * 1024 * 1024;
+      100 * 1024 * 1024;
 
-    if (
-      file.size > maxFileSize
-    ) {
+    if (file.size > maxFileSize) {
       throw new Error(
-        "Image size must be less than 5 MB",
+        "File size must be less than 100 MB"
       );
     }
 
@@ -1007,6 +1016,89 @@ export const classApi = {
 };
 
 // ======================================================
+// PARENT API
+// ======================================================
+
+export const parentApi = {
+  // Parent -> Student
+  requestLink: async (token, studentEmail) => {
+    if (!token) {
+      throw new Error("Authentication token is required");
+    }
+
+    if (!studentEmail || !studentEmail.trim()) {
+      throw new Error("Student email is required");
+    }
+
+    return await request("/parent/request-link", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        studentEmail: studentEmail.trim().toLowerCase(),
+      }),
+    });
+  },
+
+  // Student -> Get pending request
+  getLinkRequest: async (token) => {
+    if (!token) {
+      throw new Error("Authentication token is required");
+    }
+
+    return await request("/parent/link-request", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  },
+
+  // Student -> Accept
+  acceptLink: async (token) => {
+    if (!token) {
+      throw new Error("Authentication token is required");
+    }
+
+    return await request("/parent/accept-link", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  },
+
+  // Student -> Reject
+  rejectLink: async (token) => {
+    if (!token) {
+      throw new Error("Authentication token is required");
+    }
+
+    return await request("/parent/reject-link", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  },
+
+  // Parent -> Get linked child
+  getChild: async (token) => {
+    if (!token) {
+      throw new Error("Authentication token is required");
+    }
+
+    return await request("/parent/child", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  },
+};
+
+// ======================================================
 // DEFAULT EXPORT
 // ======================================================
 
@@ -1014,4 +1106,5 @@ export default {
   authApi,
   taskApi,
   classApi,
+  parentApi,
 };

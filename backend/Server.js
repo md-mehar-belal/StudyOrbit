@@ -14,6 +14,7 @@ const taskRoutes = require("./routes/taskRoutes");
 const authRoutes = require("./routes/authRoutes");
 const deletedTaskRoutes = require("./routes/deletedTaskRoutes");
 const classRoutes = require("./routes/classRoutes");
+const parentRoutes = require("./routes/parentRoutes");
 
 // ========================================
 // APP
@@ -61,6 +62,9 @@ app.use("/api/deleted-tasks", deletedTaskRoutes);
 
 // Classes
 app.use("/api/classes", classRoutes);
+
+// Parents
+app.use("/api/parent", parentRoutes);
 
 // ========================================
 // TEST ROUTE

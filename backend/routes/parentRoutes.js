@@ -1,6 +1,7 @@
 const express = require("express");
 const User = require("../models/User");
 const authMiddleware = require("../middleware/authMiddleware");
+const Task = require("../models/Task");
 
 const router = express.Router();
 
@@ -232,17 +233,25 @@ router.post("/reject-link", authMiddleware, async (req, res) => {
 });
 
 // ======================================================
-// GET LINKED CHILD
+// GET LINKED CHILD + PROGRESS
 // Parent side
 // ======================================================
 
 router.get("/child", authMiddleware, async (req, res) => {
   try {
+    // ----------------------------------------------
+    // ONLY PARENT
+    // ----------------------------------------------
+
     if (req.user.role !== "parent") {
       return res.status(403).json({
         message: "Only parents can view child information",
       });
     }
+
+    // ----------------------------------------------
+    // FIND LINKED CHILD
+    // ----------------------------------------------
 
     const child = await User.findOne({
       parentId: req.user.id,
@@ -250,20 +259,79 @@ router.get("/child", authMiddleware, async (req, res) => {
       role: "student",
     }).select("name email role parentLinkStatus");
 
+    // ----------------------------------------------
+    // NO LINKED CHILD
+    // ----------------------------------------------
+
     if (!child) {
       return res.json({
         child: null,
+        progress: {
+          totalTasks: 0,
+          completedTasks: 0,
+          pendingTasks: 0,
+          reviewedTasks: 0,
+        },
+        tasks: [],
       });
     }
 
+    // ----------------------------------------------
+    // GET CHILD TASKS
+    // ----------------------------------------------
+
+    const tasks = await Task.find({
+      studentId: child._id,
+    })
+      .populate("classId", "name subject classCode")
+      .populate("teacherId", "name email")
+      .sort({ createdAt: -1 });
+
+    // ----------------------------------------------
+    // CALCULATE PROGRESS
+    // ----------------------------------------------
+
+    const totalTasks = tasks.length;
+
+    const completedTasks = tasks.filter(
+      (task) => task.completed === true
+    ).length;
+
+    const pendingTasks = tasks.filter(
+      (task) => task.completed === false
+    ).length;
+
+    const reviewedTasks = tasks.filter(
+      (task) => task.reviewStatus === "reviewed"
+    ).length;
+
+    // ----------------------------------------------
+    // RESPONSE
+    // ----------------------------------------------
+
     return res.json({
-      child,
+      child: {
+        id: child._id,
+        name: child.name,
+        email: child.email,
+        role: child.role,
+        parentLinkStatus: child.parentLinkStatus,
+      },
+
+      progress: {
+        totalTasks,
+        completedTasks,
+        pendingTasks,
+        reviewedTasks,
+      },
+
+      tasks,
     });
   } catch (error) {
-    console.error("Get linked child error:", error);
+    console.error("Get linked child progress error:", error);
 
     return res.status(500).json({
-      message: "Unable to fetch child",
+      message: "Unable to fetch child progress",
     });
   }
 });

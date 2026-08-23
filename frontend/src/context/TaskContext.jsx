@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 
-import { taskApi } from "../api/api";
+import { taskApi, parentApi } from "../api/api";
 
 import { useAuth } from "./AuthContext";
 
@@ -302,14 +302,32 @@ export function TaskProvider({ children }) {
   const fetchTasks = useCallback(async () => {
     if (!token || !user) {
       setTasks([]);
-
       return [];
     }
 
     try {
       setLoading(true);
-
       setError("");
+
+      // ==========================================
+      // PARENT
+      // ==========================================
+
+      if (user.role === "parent") {
+        const data = await parentApi.getChild(token);
+
+        const childTasks = normalizeTaskList(data?.tasks);
+
+        const sortedTasks = sortTasks(childTasks);
+
+        setTasks(sortedTasks);
+
+        return sortedTasks;
+      }
+
+      // ==========================================
+      // STUDENT / TEACHER
+      // ==========================================
 
       const data = await taskApi.getAll(token);
 
@@ -326,7 +344,6 @@ export function TaskProvider({ children }) {
       const message = error?.message || "Failed to fetch tasks";
 
       setError(message);
-
       setTasks([]);
 
       throw error;
@@ -334,7 +351,6 @@ export function TaskProvider({ children }) {
       setLoading(false);
     }
   }, [token, user, normalizeTaskList, sortTasks]);
-
   // ====================================================
   // FETCH DELETED TASKS
   // ====================================================
@@ -379,17 +395,37 @@ export function TaskProvider({ children }) {
     const loadTaskData = async () => {
       if (!token || !user) {
         resetTasks();
-
         return;
       }
 
       try {
         setLoading(true);
-
         setError("");
 
         // ==========================================
-        // ACTIVE TASKS
+        // PARENT
+        // ==========================================
+
+        if (user.role === "parent") {
+          const childData = await parentApi.getChild(token);
+
+          if (cancelled) {
+            return;
+          }
+
+          const childTasks = normalizeTaskList(childData?.tasks);
+
+          setTasks(sortTasks(childTasks));
+
+          // Parent ke liye deleted task history
+          // abhi load nahi karni hai.
+          setDeletedTasks([]);
+
+          return;
+        }
+
+        // ==========================================
+        // STUDENT / TEACHER
         // ==========================================
 
         const activeData = await taskApi.getAll(token);
@@ -417,11 +453,6 @@ export function TaskProvider({ children }) {
 
           setDeletedTasks(sortTasks(deletedList));
         } catch (deletedError) {
-          // ----------------------------------------
-          // Deleted history failure should not
-          // destroy active task data.
-          // ----------------------------------------
-
           console.warn(
             "Deleted task history could not be loaded:",
             deletedError,
@@ -439,7 +470,6 @@ export function TaskProvider({ children }) {
         setError(error?.message || "Failed to load tasks");
 
         setTasks([]);
-
         setDeletedTasks([]);
       } finally {
         if (!cancelled) {

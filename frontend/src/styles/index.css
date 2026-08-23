@@ -2977,6 +2977,236 @@ textarea {
 }
 
 /* =========================================================
+   STUDENT - PARENT LINK
+   ========================================================= */
+
+.parent-request {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 42px 0 60px;
+}
+
+.parent-request > h2 {
+  margin: 0 0 8px;
+  font-size: 32px;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.2;
+}
+
+/* =========================================================
+   SUCCESS / ERROR MESSAGE
+   ========================================================= */
+
+.parent-request .form-error,
+.parent-request .form-success {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 18px 0;
+  padding: 13px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.parent-request .form-error {
+  color: #b91c1c;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+.parent-request .form-success {
+  color: #15803d;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+}
+
+/* =========================================================
+   NO PENDING REQUEST
+   ========================================================= */
+
+.parent-request > p {
+  margin: 16px 0 0;
+  color: #64748b;
+  font-size: 15px;
+}
+
+/* =========================================================
+   PARENT REQUEST CARD
+   ========================================================= */
+
+.parent-request-card {
+  width: 100%;
+  max-width: 760px;
+  margin-top: 24px;
+  padding: 28px;
+  box-sizing: border-box;
+
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+
+  box-shadow: 0 8px 25px rgba(15, 23, 42, 0.06);
+}
+
+.parent-request-card h3 {
+  margin: 0 0 18px;
+  font-size: 21px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.parent-request-card p {
+  margin: 8px 0;
+  color: #475569;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.parent-request-card p strong {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+/* Parent email */
+
+.parent-request-card p:last-of-type {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 8px 12px;
+
+  color: #2563eb;
+  background: #eff6ff;
+
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* =========================================================
+   ACCEPT / REJECT BUTTONS
+   ========================================================= */
+
+.parent-request-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.parent-request-actions button {
+  min-width: 100px;
+  height: 42px;
+  padding: 0 20px;
+
+  border: 1px solid transparent;
+  border-radius: 9px;
+
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* Accept */
+
+.parent-request-actions button:first-child {
+  color: #ffffff;
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+.parent-request-actions button:first-child:hover:not(:disabled) {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+  box-shadow: 0 5px 12px rgba(37, 99, 235, 0.2);
+  transform: translateY(-1px);
+}
+
+/* Reject */
+
+.parent-request-actions button:last-child {
+  color: #dc2626;
+  background: #ffffff;
+  border-color: #fecaca;
+}
+
+.parent-request-actions button:last-child:hover:not(:disabled) {
+  background: #fef2f2;
+  border-color: #fca5a5;
+}
+
+/* Disabled */
+
+.parent-request-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.parent-request > p:first-child {
+  color: #64748b;
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .parent-request {
+    padding: 28px 18px 50px;
+  }
+
+  .parent-request > h2 {
+    font-size: 27px;
+  }
+
+  .parent-request-card {
+    padding: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .parent-request {
+    padding: 24px 14px 40px;
+  }
+
+  .parent-request > h2 {
+    font-size: 24px;
+  }
+
+  .parent-request-card {
+    padding: 18px;
+    border-radius: 12px;
+  }
+
+  .parent-request-card h3 {
+    font-size: 19px;
+  }
+
+  .parent-request-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .parent-request-actions button {
+    width: 100%;
+  }
+}
+
+/* =========================================================
    RESPONSIVE - VERY SMALL DEVICES
    ========================================================= */
 

@@ -3293,3 +3293,146 @@ select:focus-visible {
     animation-iteration-count: 1 !important;
   }
 }
+
+
+/* ======================================================
+   LINK CHILD PAGE
+   ====================================================== */
+
+.link-child {
+  width: 100%;
+}
+
+.link-child-header {
+  margin-bottom: 24px;
+}
+
+.link-child-header h2 {
+  margin: 0 0 8px;
+  color: var(--text-primary);
+  font-size: 30px;
+  font-weight: 750;
+}
+
+.link-child-header p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 15px;
+}
+
+/* Link Child Form */
+
+.link-child-form {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  width: 100%;
+  margin-bottom: 28px;
+}
+
+.link-child-form .form-group {
+  width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.link-child-form label {
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.link-child-form input {
+  width: 100%;
+  height: 44px;
+  padding: 0 13px;
+
+  background: white;
+  color: var(--text-primary);
+
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-sm);
+
+  outline: none;
+  font-size: 14px;
+
+  transition:
+    border-color var(--transition),
+    box-shadow var(--transition);
+}
+
+.link-child-form input:focus {
+  border-color: var(--primary);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(37, 99, 235, 0.10);
+}
+
+.link-child-form input::placeholder {
+  color: var(--text-light);
+}
+
+/* Send Link Request */
+
+.link-child-form .primary-btn {
+  height: 44px;
+  padding: 0 18px;
+  white-space: nowrap;
+}
+
+/* Child Progress */
+
+.child-progress-info {
+  width: 100%;
+  min-height: 180px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px 24px;
+
+  background: white;
+
+  border: 1px dashed #cbd5e1;
+  border-radius: var(--radius-lg);
+
+  text-align: center;
+}
+
+.child-progress-info h3 {
+  margin: 0 0 8px;
+
+  color: var(--text-secondary);
+
+  font-size: 20px;
+  font-weight: 750;
+}
+
+.child-progress-info p {
+  margin: 0;
+
+  color: var(--text-light);
+
+  font-size: 14px;
+}
+
+/* Responsive */
+
+@media (max-width: 700px) {
+  .link-child-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .link-child-form .form-group {
+    width: 100%;
+  }
+
+  .link-child-form .primary-btn {
+    width: 100%;
+  }
+}

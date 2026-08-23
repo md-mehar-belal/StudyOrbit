@@ -275,14 +275,6 @@ function Dashboard() {
       return (
         <>
           <LinkChild />
-
-          <div className="empty-state">
-            <h2>Child Progress</h2>
-
-            <p>
-              View your child's tasks, submissions, and teacher ratings here.
-            </p>
-          </div>
         </>
       );
     }

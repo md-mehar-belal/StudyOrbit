@@ -27,7 +27,6 @@ function LinkChild() {
       const data = await parentApi.requestLink(token, studentEmail);
 
       setSuccess(data?.message || "Link request sent successfully");
-
       setStudentEmail("");
 
       setTimeout(() => {
@@ -46,9 +45,10 @@ function LinkChild() {
 
   return (
     <div className="link-child">
-      <h2>Link Your Child</h2>
-
-      <p>Enter your child's registered email address.</p>
+      <div className="link-child-header">
+        <h2>Link Your Child</h2>
+        <p>Enter your child's registered email address.</p>
+      </div>
 
       {error && (
         <div className="form-error" role="alert">
@@ -62,23 +62,30 @@ function LinkChild() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="studentEmail">Student Email</label>
+      <form className="link-child-form" onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="studentEmail">Student Email</label>
 
-        <input
-          id="studentEmail"
-          type="email"
-          value={studentEmail}
-          placeholder="Enter student email"
-          onChange={(e) => setStudentEmail(e.target.value)}
-          disabled={loading}
-          required
-        />
+          <input
+            id="studentEmail"
+            type="email"
+            value={studentEmail}
+            placeholder="Enter student email"
+            onChange={(e) => setStudentEmail(e.target.value)}
+            disabled={loading}
+            required
+          />
+        </div>
 
-        <button type="submit" disabled={loading}>
+        <button className="primary-btn" type="submit" disabled={loading}>
           {loading ? "Sending..." : "Send Link Request"}
         </button>
       </form>
+
+      <div className="child-progress-info">
+        <h3>Child Progress</h3>
+        <p>View your child's tasks, submissions, and teacher ratings here.</p>
+      </div>
     </div>
   );
 }

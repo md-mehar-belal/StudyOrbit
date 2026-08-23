@@ -171,7 +171,7 @@ router.post("/accept-link", authMiddleware, async (req, res) => {
 
     await student.save();
 
-    return res.json({
+    return res.status(200).json({
       message: "Parent linked successfully",
       parentId: student.parentId,
     });
@@ -179,7 +179,7 @@ router.post("/accept-link", authMiddleware, async (req, res) => {
     console.error("Accept parent request error:", error);
 
     return res.status(500).json({
-      message: "Unable to accept parent request",
+      message: error.message || "Unable to accept parent request",
     });
   }
 });

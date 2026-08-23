@@ -87,11 +87,7 @@ const userSchema = new mongoose.Schema(
 
     parentLinkStatus: {
       type: String,
-      enum: [
-        "none",
-        "pending",
-        "approved",
-      ],
+      enum: ["none", "pending", "linked"],
       default: "none",
     },
 
